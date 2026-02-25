@@ -1,11 +1,72 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f4f4f4;
-    padding: 50px;
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
+/* Body */
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  height: 100vh;
+  background: url("images/bg-main.png") center/cover no-repeat;
+  
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  flex-direction: column;   /* stack logo + button vertically */
+  color: white;
+  text-align: center;       /* centers text inside hero-content */
+}
+
+/* Center Content */
+.hero-content {
+  display: flex;
+  flex-direction: column;  /* stack logo + button */
+  align-items: center;     /* horizontal center */
+  gap: 20px;               /* space between logo and button */
+}
+
+.logo {
+  width: 500px;
+  margin-bottom: 30px;
+}
+
+/* Button */
+.cta-btn {
+  padding: 15px 40px;
+  border-radius: 30px;
+  border: none;
+  background: white;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.cta-btn:hover {
+  background: #ddd;
+}
+
+/* Bottom Right Link */
+.bottom-link {
+  position: absolute;
+  bottom: 30px;
+  right: 40px;
+}
+
+.bottom-link a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.bottom-link a:hover {
+  opacity: 0.7;
 }
