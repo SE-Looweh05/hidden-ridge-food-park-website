@@ -1,51 +1,56 @@
-# Hidden Ridge Food Park Website
+# 🚀 Hidden Ridge Food Park (Full-Stack Upgrade)
 
-A simple, interactive website for Hidden Ridge Food Park built using **HTML, CSS, and JavaScript**.
-
-This project demonstrates front-end structure, UI layout implementation, and JavaScript-based interactivity, including a multi-section layout with hero, cafe, food stalls, and end sections.
+This project was originally built using **HTML, CSS, and JavaScript**, and was later upgraded into a full-stack web application using **React (Vite)** and **Node.js (Express)**.
 
 ---
 
-## Current Interactivity
+## 🔧 Features
 
-- **"Dine with us" button:** Displays a popup showing the food park’s operating hours.  
-- **"See our menu" button:** Smoothly scrolls the page to the food stalls section.  
-- Hovering over food stall cards slightly enlarges the card for a visual effect.  
-- Buttons respond instantly to user interaction using JavaScript event handling.
-
----
-
-## Website Sections
-
-### Hero Section
-- Features the Hidden Ridge logo and main call-to-action buttons.
-
-### Cafe Section (Updated)
-- Replaced old two-column layout with a single full-background image (`cafe-bg.png`) that fills the entire section.  
-- Added separate, CSS-rendered text overlay instead of text embedded in the image.  
-- Text overlay includes:
-  - **HIDDEN VIBES (left):** Montserrat, 18.3px  
-  - **HONEST BREWS (right):** Montserrat, 18.3px  
-  - **HIDDEN RIDGE CAFE (center):** Oswald, 100px  
-  - **Where every cup feels like an escape (center below title):** Lora, 25.6px, italic  
-- Text color updated to **light red `#e3cfcf`** with subtle text-shadow for readability.  
-- Responsive positioning and scalable overlay for all screen sizes.
-
-### Food Stalls Section
-- Six portrait-style stall cards showing logo and description; three per row.  
-- Responsive spacing across devices.
-
-### End Section
-- Background image, horizontal separator line, and three columns showing location, business hours, and social media.
+- Modern React frontend powered by Vite  
+- Responsive UI with reusable components  
+- Dynamic rendering of food stalls using mapped data  
+- Table reservation system with modal form  
+- REST API integration using Express.js  
+- Admin panel to view submitted reservations  
+- Smooth scrolling and improved user interaction
+- Interactive hover effects on food stall cards with subtle scaling for improved user experience
 
 ---
 
-## Screenshots
+## ⚙️ Tech Stack
+
+- **Frontend:** React.js (Vite), CSS  
+- **Backend:** Node.js, Express.js  
+- **API:** RESTful API (GET & POST)  
+- **Tools:** Git, GitHub  
+
+---
+
+## 📌 Key Learnings
+
+- Transitioned from static website to full-stack architecture  
+- Implemented client-server communication using fetch API  
+- Managed state and user input using React hooks  
+- Built and consumed REST APIs  
+- Structured a scalable project with separate frontend and backend  
+
+---
+
+## 🖼️ Screenshots
 
 ### Homepage
 ![Homepage](screenshots/1ss-main.png)
 
-### Cafe Section (Updated)
+### Reservation Modal
+![Reservation Modal](screenshots/1ss-reservation.png)
+
+### Reservation Form (Input)
+![Reservation Input](screenshots/1ss-reservation2.png)
+
+### Reservation Confirmation
+![Reservation Confirmation](screenshots/1ss-reservation3.png)
+
+### Cafe Section
 ![Cafe Section](screenshots/2ss-cafe.png)
 
 ### Food Stalls Section (Part 1)
@@ -57,21 +62,111 @@ This project demonstrates front-end structure, UI layout implementation, and Jav
 ### End Section
 ![End Section](screenshots/4ss-end.png)
 
----
+### Admin Panel
+![Admin Panel](screenshots/5ss-admin-panel.png)
 
-## Design & Development Process
-
-- Layout and visual structure prototyped in **Canva** to plan spacing, alignment, and visual hierarchy.  
-- Cafe Section redesigned using **CSS-rendered text overlay** on a full-background image for sharper, flexible, and readable text.  
-- HTML and CSS used for structure and styling.  
-- JavaScript used for event-driven interactivity and smooth scrolling.  
-- **AI-assisted development tools** helped with debugging, layout refinement, and workflow efficiency.
+### API Reservations (JSON Data)
+![API Reservations](screenshots/6ss-api-reservations.png)
 
 ---
 
-## How to Run
+## 🚧 Future Plans
 
-Clone the repository:
+- Add clickable food stall cards that open a modal displaying the stall’s full menu and prices  
+- Improve UI/UX with animations and transitions for modals and page elements  
+- Expand admin panel with features such as deleting or managing reservations  
+- Add form validation and error handling for reservation inputs  
+- Enhance backend with database integration (e.g., MongoDB or PostgreSQL) instead of in-memory storage  
+- Improve responsiveness and accessibility across devices  
+- Potential deployment of the full-stack application (frontend + backend)
 
+---
+
+## 🎨 Design & Development Process
+
+- Layout and visual structure were prototyped in **Canva** to plan spacing, alignment, and visual hierarchy.  
+- The Cafe Section was redesigned using **CSS-rendered text overlay** on a full-background image for sharper, scalable, and more readable text.  
+- Built with **HTML and CSS** for structure and styling.  
+- Implemented interactivity using **JavaScript event handling** and smooth scrolling.  
+- Transitioned into a **React (Vite) + Node.js full-stack application**, enabling dynamic UI and backend integration.  
+- **AI-assisted development tools** were used to support debugging, layout refinement, and workflow efficiency.
+
+---
+
+## 🖥️ How to Run the Project
+
+### 1. Clone the repository
 ```bash
 git clone https://github.com/SE-Looweh05/Hidden-Ridge-Food-Park-Website.git
+```
+
+### 2. Navigate into the project folder
+```bash
+cd Hidden-Ridge-Food-Park-Website
+```
+
+### ▶️ Frontend Setup (React + Vite)
+### 3. Install dependencies
+```bash
+npm install
+```
+
+### 4. Run the development server
+```bash
+npm run dev
+```
+
+### Then open the URL shown in the terminal (usually):
+```bash
+http://localhost:5173
+```
+
+---
+
+### ⚙️ Backend Setup (Node + Express)
+
+If your backend is inside a separate folder (e.g. backend):
+
+### 1. Navigate to backend
+```bash
+cd backend
+```
+
+### 2. Install dependencies
+```bash
+npm install
+```
+
+### 3. Start the server
+```bash
+node server.js
+```
+
+### Backend usually runs on:
+```bash
+http://localhost:5000
+```
+
+### 🔗 API Endpoint Example
+- GET /api/reservations
+- POST /api/reservations
+
+### Example response:
+```bash
+[
+  {"id":1774425284604,"name":"AJ","guests":"3"},
+  {"id":1774425318507,"name":"Trisia","guests":"6"},
+  {"id":1774425330803,"name":"Lowell","guests":"2"}
+]
+```
+
+### 📁 Project Structure
+```bash
+Hidden-Ridge-Food-Park-Website/
+├── screenshots/
+├── src/
+├── backend/
+├── index.html
+├── package.json
+└── README.md
+```
