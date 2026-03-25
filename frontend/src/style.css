@@ -14,7 +14,7 @@ body {
 .hero {
   position: relative;
   height: 100vh;
-  background: url("images/bg-main.png") center/cover no-repeat;
+  background: url("/images/bg-main.png") center/cover no-repeat;
   
   display: flex;
   justify-content: center; /* horizontal center */
@@ -80,7 +80,7 @@ body {
   width: 100%;
   height: 1000px;
 
-  background: url("images/cafe-bg.png") center/cover no-repeat;
+  background: url("/images/cafe-bg.png") center/cover no-repeat;
 }
 
 /* Overlay */
@@ -213,7 +213,7 @@ body {
   position: relative;
   width: 100%;
   height: 1000px; /* full page height */
-  background: url("images/bg-end.png") center/cover no-repeat;
+  background: url("/images/bg-end.png") center/cover no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -261,4 +261,40 @@ body {
   height: auto;
   display: block;
   margin: 0 auto;    /* center it horizontally */
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.modal input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.modal button {
+  margin: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
 }
