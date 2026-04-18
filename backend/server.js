@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔥 Supabase PostgreSQL Pooler Connection
+// Supabase PostgreSQL Connection
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
   res.send("Backend connected to Supabase 🚀");
 });
 
-// ✅ GET reservations
+// GET reservations
 app.get("/api/reservations", async (req, res) => {
   try {
     const result = await pool.query(
@@ -33,13 +33,11 @@ app.get("/api/reservations", async (req, res) => {
   }
 });
 
-// ✅ POST reservation (with validation)
+// POST reservation
 app.post("/api/reservations", async (req, res) => {
   const { name, guests } = req.body;
-
   const guestsNum = Number(guests);
 
-  // 🔥 VALIDATION
   if (!name || !name.trim() || guestsNum <= 0 || !Number.isInteger(guestsNum)) {
     return res.status(400).json({ message: "Invalid input" });
   }
@@ -49,36 +47,17 @@ app.post("/api/reservations", async (req, res) => {
       "INSERT INTO reservations (name, guests) VALUES ($1, $2) RETURNING *",
       [name.trim(), guestsNum]
     );
-
-    res.json({
-      message: "Reservation added!",
-      data: result.rows[0],
-    });
+    res.json({ message: "Reservation added!", data: result.rows[0] });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error saving reservation" });
   }
 });
 
-// ✅ DELETE reservation
-app.delete("/api/reservations/:id", async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    await pool.query("DELETE FROM reservations WHERE id = $1", [id]);
-
-    res.json({ message: "Reservation deleted!" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error deleting reservation" });
-  }
-});
-
-// ✅ PUT (Edit) reservation
+// PUT reservation
 app.put("/api/reservations/:id", async (req, res) => {
   const { id } = req.params;
   const { name, guests } = req.body;
-
   const guestsNum = Number(guests);
 
   if (!name || !name.trim() || guestsNum <= 0 || !Number.isInteger(guestsNum)) {
@@ -90,11 +69,23 @@ app.put("/api/reservations/:id", async (req, res) => {
       "UPDATE reservations SET name = $1, guests = $2 WHERE id = $3 RETURNING *",
       [name.trim(), guestsNum, id]
     );
-
     res.json({ message: "Reservation updated!", data: result.rows[0] });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error updating reservation" });
+  }
+});
+
+// DELETE reservation
+app.delete("/api/reservations/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query("DELETE FROM reservations WHERE id = $1", [id]);
+    res.json({ message: "Reservation deleted!" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error deleting reservation" });
   }
 });
 
