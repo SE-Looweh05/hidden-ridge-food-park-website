@@ -779,3 +779,19 @@ body {
   .admin-table th:first-child,
   .admin-table td:first-child { display: none; }
 }
+
+.admin-page {
+  position: relative;
+  z-index: 99999;
+  background: #111;
+  min-height: 100vh;
+}
+
+.fixed-layer {
+  pointer-events: none;
+}
+
+/* hide animations on admin */
+.admin-page ~ .fixed-layer {
+  display: none;
+}
