@@ -6,6 +6,7 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState("");
   const [guests, setGuests] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // SCROLL-BASED OPACITY STATE
   const [heroOpacity, setHeroOpacity] = useState(1);
@@ -92,6 +93,9 @@ function App() {
       alert("Please enter a valid name and a positive number of guests.");
       return;
     }
+
+    setIsSubmitting(true);
+
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/reservations`, {
         method: "POST",
@@ -106,6 +110,9 @@ function App() {
       setGuests("");
     } catch (err) {
       console.error(err);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -318,9 +325,28 @@ function App() {
                 min="1"
                 onChange={(e) => setGuests(e.target.value)}
                 required
-              />
-              <button type="submit" className="btn-primary">Reserve</button>
-              <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>
+              />              
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={isSubmitting}
+                style={{
+                  opacity: isSubmitting ? 0.7 : 1,
+                  cursor: isSubmitting ? "not-allowed" : "pointer"
+                }}
+              >
+                {isSubmitting ? "Submitting..." : "Reserve"}
+              </button>
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={() => setShowModal(false)}
+                disabled={isSubmitting}
+                style={{
+                  opacity: isSubmitting ? 0.5 : 1,
+                  cursor: isSubmitting ? "not-allowed" : "pointer"
+                }}
+              >
                 Cancel
               </button>
             </form>

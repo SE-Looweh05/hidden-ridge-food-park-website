@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 
+const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN;
+
 function AdminPanel() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [pinInput, setPinInput] = useState("");
+  const [pinError, setPinError] = useState(false);
+
   const [reservations, setReservations] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
@@ -23,6 +30,19 @@ function AdminPanel() {
   useEffect(() => {
     fetchReservations();
   }, []);
+
+  const handlePinSubmit = (e) => {
+    e.preventDefault();
+    if (pinInput === ADMIN_PIN) {
+      setIsAuthenticated(true);
+      setShowLoginModal(false);
+      setPinError(false);
+      setPinInput("");
+    } else {
+      setPinError(true);
+      setPinInput("");
+    }
+  };
 
   const handleDelete = (id) => {
     setSelectedId(id);
@@ -69,13 +89,35 @@ function AdminPanel() {
       {/* HEADER */}
       <div className="admin-header">
         <h1>Admin Panel</h1>
-        <a href="/" className="admin-back-btn">← Back to Website</a>
+        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+          <a href="/" className="admin-back-btn">← Back to Website</a>
+          {isAuthenticated ? (
+            <button
+              className="admin-logout-btn"
+              onClick={() => setIsAuthenticated(false)}
+            >
+              🔒 Lock
+            </button>
+          ) : (
+            <button
+              className="admin-login-btn"
+              onClick={() => setShowLoginModal(true)}
+            >
+              🔑 Admin Login
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* TABLE */}
+      {/* CONTENT */}
       <div className="admin-content">
         <h2>Reservations</h2>
-        <p className="admin-count">{reservations.length} reservation{reservations.length !== 1 ? "s" : ""} total</p>
+        <p className="admin-count">
+          {reservations.length} reservation{reservations.length !== 1 ? "s" : ""} total
+          {!isAuthenticated && (
+            <span className="admin-view-only"> — View Only</span>
+          )}
+        </p>
 
         {reservations.length === 0 ? (
           <p className="admin-empty">No reservations yet.</p>
@@ -86,7 +128,7 @@ function AdminPanel() {
                 <th>#</th>
                 <th>Name</th>
                 <th>Guests</th>
-                <th>Actions</th>
+                {isAuthenticated && <th>Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -95,26 +137,64 @@ function AdminPanel() {
                   <td>{index + 1}</td>
                   <td>{res.name}</td>
                   <td>{res.guests}</td>
-                  <td>
-                    <button
-                      className="admin-btn-edit"
-                      onClick={() => handleEdit(res)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="admin-btn-delete"
-                      onClick={() => handleDelete(res.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
+                  {isAuthenticated && (
+                    <td>
+                      <button
+                        className="admin-btn-edit"
+                        onClick={() => handleEdit(res)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="admin-btn-delete"
+                        onClick={() => handleDelete(res.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
           </table>
         )}
       </div>
+
+      {/* LOGIN MODAL */}
+      {showLoginModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Admin Login</h2>
+            <p>Enter your password to enable edit and delete.</p>
+            <form onSubmit={handlePinSubmit}>
+              <input
+                type="password"
+                placeholder="Enter password"
+                value={pinInput}
+                onChange={(e) => setPinInput(e.target.value)}
+                autoFocus
+              />
+              {pinError && (
+                <p className="pin-error">Incorrect password. Try again.</p>
+              )}
+              <div className="modal-actions">
+                <button type="submit" className="btn-primary">Login</button>
+                <button
+                  type="button"
+                  className="btn-cancel"
+                  onClick={() => {
+                    setShowLoginModal(false);
+                    setPinError(false);
+                    setPinInput("");
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* DELETE MODAL */}
       {showDeleteModal && (

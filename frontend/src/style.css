@@ -795,3 +795,112 @@ body {
 .admin-page ~ .fixed-layer {
   display: none;
 }
+
+/* ============================= */
+/* ADMIN PIN SCREEN */
+/* ============================= */
+
+.admin-pin-screen {
+  min-height: 100vh;
+  background: #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-pin-box {
+  background: #1e1e1e;
+  padding: 40px;
+  border-radius: 12px;
+  width: 320px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.admin-pin-box h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.admin-pin-box p {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 24px;
+}
+
+.admin-pin-box input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+  background: #2a2a2a;
+  color: white;
+}
+
+.pin-error {
+  color: #e53935;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.admin-pin-btn {
+  width: 100%;
+  padding: 12px;
+  background: #ffbd59;
+  color: black;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.2s ease;
+}
+
+.admin-pin-btn:hover {
+  background: #f0a500;
+}
+
+.admin-logout-btn {
+  background: #333;
+  color: #aaa;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-logout-btn:hover {
+  background: #444;
+  color: white;
+}
+
+.admin-login-btn {
+  background: #ffbd59;
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.admin-login-btn:hover {
+  background: #f0a500;
+}
+
+.admin-view-only {
+  color: #888;
+  font-style: italic;
+  margin-left: 6px;
+}
