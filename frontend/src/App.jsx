@@ -102,8 +102,14 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, guests }),
       });
+
       const data = await res.json();
-      console.log(data);
+
+      if (!res.ok) {
+        alert(data.message || "Something went wrong. Please try again.");
+        return;
+      }
+
       alert("Reservation submitted!");
       setShowModal(false);
       setName("");

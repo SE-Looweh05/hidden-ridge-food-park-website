@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const rateLimit = require("express-rate-limit");
 const { Pool } = require("pg");
 require("dotenv").config();
 
@@ -18,6 +19,13 @@ app.use(express.json());
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
+});
+
+// RATE LIMITER — max 3 reservations per IP per hour
+const reservationLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 3,
+  message: { message: "Too many reservations from this device. Please try again later." }
 });
 
 // TEST ROUTE
@@ -39,7 +47,7 @@ app.get("/api/reservations", async (req, res) => {
 });
 
 // POST reservation
-app.post("/api/reservations", async (req, res) => {
+app.post("/api/reservations", reservationLimiter, async (req, res) => {
   const { name, guests } = req.body;
   const guestsNum = Number(guests);
 
@@ -90,7 +98,7 @@ app.delete("/api/reservations/:id", async (req, res) => {
     res.json({ message: "Reservation deleted!" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Error deleting reservation" });
+    res.status(500).json({ message: "Error updating reservation" });
   }
 });
 
