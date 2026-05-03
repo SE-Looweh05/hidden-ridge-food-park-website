@@ -383,7 +383,7 @@ function App() {
               </div>
               <div className="end-column">
                 <h3>BUSINESS HOURS</h3>
-                <p>Tuesday to Saturday: 3:00 PM - 12:00 MN<br /><b>Monday: CLOSED</b></p>
+                <p>Tuesday to Sunday: 3:00 PM - 12:00 MN<br /><b>Monday: CLOSED</b></p>
               </div>
               <div className="end-column">
                 <h3>GET SOCIAL</h3>
