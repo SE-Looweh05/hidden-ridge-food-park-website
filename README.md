@@ -17,7 +17,7 @@ PostgreSQL database, deployed on Vercel (frontend) and Render (backend).
 
 - Full-stack reservation system with CRUD functionality
 - Date & time picker with business rules enforcement
-  - Tue–Sat, 3:00 PM–9:00 PM
+  - Tue–Sun, 3:00 PM–9:00 PM
   - Monday closed
   - Same-day booking requires +2 hour lead time
 - Rate limiting (3 reservations per IP/hour) to prevent abuse
