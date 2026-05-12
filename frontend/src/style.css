@@ -1029,3 +1029,63 @@ body {
   margin-bottom: 16px;
   opacity: 1 !important;
 }
+
+/* ============================= */
+/* ADMIN SEARCH & SORT */
+/* ============================= */
+
+.admin-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-search {
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1a1a1a;
+  color: white;
+  font-size: 14px;
+  width: 260px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.admin-search:focus {
+  border-color: #ffbd59;
+}
+
+.admin-search::placeholder {
+  color: #666;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.sortable:hover {
+  color: #ffbd59;
+}
+
+.admin-export-btn {
+  background: #2a2a2a;
+  color: #ffbd59;
+  border: 1px solid #ffbd59;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-export-btn:hover {
+  background: #ffbd59;
+  color: black;
+}

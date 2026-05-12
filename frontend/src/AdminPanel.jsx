@@ -17,6 +17,11 @@ function AdminPanel() {
   const [editName, setEditName] = useState("");
   const [editGuests, setEditGuests] = useState("");
 
+  // SEARCH & SORT STATE
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortField, setSortField] = useState("id");
+  const [sortDirection, setSortDirection] = useState("desc");
+
   const fetchReservations = async () => {
     setLoading(true);
     try {
@@ -87,6 +92,92 @@ function AdminPanel() {
     }
   };
 
+  // SORT HANDLER
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
+  };
+
+  // SORT ICON
+  const getSortIcon = (field) => {
+    if (sortField !== field) return " ↕";
+    return sortDirection === "asc" ? " ↑" : " ↓";
+  };
+
+  // FILTER + SORT
+  const filteredAndSorted = reservations
+    .filter((res) =>
+      res.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      let valA = a[sortField];
+      let valB = b[sortField];
+
+      if (sortField === "guests") {
+        valA = Number(valA);
+        valB = Number(valB);
+      } else if (sortField === "date") {
+        valA = valA ? new Date(valA) : new Date(0);
+        valB = valB ? new Date(valB) : new Date(0);
+      } else {
+        valA = String(valA || "").toLowerCase();
+        valB = String(valB || "").toLowerCase();
+      }
+
+      if (valA < valB) return sortDirection === "asc" ? -1 : 1;
+      if (valA > valB) return sortDirection === "asc" ? 1 : -1;
+      return 0;
+    });
+
+  // CSV EXPORT
+  const exportCSV = () => {
+    const headers = ["#", "Name", "Guests", "Date", "Time"];
+    const rows = filteredAndSorted.map((res, index) => [
+      index + 1,
+      res.name,
+      res.guests,
+      res.date ? new Date(res.date).toLocaleDateString("en-US", {
+        month: "short", day: "numeric", year: "numeric"
+      }) : "—",
+      res.time ? (() => {
+        const [h, m] = res.time.split(":");
+        const hour = parseInt(h);
+        return `${hour > 12 ? hour - 12 : hour}:${m} ${hour >= 12 ? "PM" : "AM"}`;
+      })() : "—"
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map((row) => row.map((val) => `"${val}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `reservations-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // FORMAT HELPERS
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "—";
+    return new Date(dateStr).toLocaleDateString("en-US", {
+      month: "short", day: "numeric", year: "numeric"
+    });
+  };
+
+  const formatTime = (timeStr) => {
+    if (!timeStr) return "—";
+    const [h, m] = timeStr.split(":");
+    const hour = parseInt(h);
+    return `${hour > 12 ? hour - 12 : hour}:${m} ${hour >= 12 ? "PM" : "AM"}`;
+  };
+
   return (
     <div className="admin-page">
 
@@ -96,12 +187,17 @@ function AdminPanel() {
         <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
           <a href="/" className="admin-back-btn">← Back to Website</a>
           {isAuthenticated ? (
-            <button
-              className="admin-logout-btn"
-              onClick={() => setIsAuthenticated(false)}
-            >
-              🔒 Lock
-            </button>
+            <>
+              <button className="admin-export-btn" onClick={exportCSV}>
+                ⬇ Export CSV
+              </button>
+              <button
+                className="admin-logout-btn"
+                onClick={() => setIsAuthenticated(false)}
+              >
+                🔒 Lock
+              </button>
+            </>
           ) : (
             <button
               className="admin-login-btn"
@@ -115,46 +211,86 @@ function AdminPanel() {
 
       {/* CONTENT */}
       <div className="admin-content">
-        <h2>Reservations</h2>
-        <p className="admin-count">
-          {!loading && (
-            <>
-              {reservations.length} reservation{reservations.length !== 1 ? "s" : ""} total
-            </>
-          )}
-          {!isAuthenticated && !loading && (
-            <span className="admin-view-only"> — View Only</span>
-          )}
-        </p>
+        <div className="admin-table-header">
+          <div>
+            <h2>Reservations</h2>
+            <p className="admin-count">
+              {!loading && (
+                <>
+                  {filteredAndSorted.length} of {reservations.length} reservation{reservations.length !== 1 ? "s" : ""}
+                  {!isAuthenticated && (
+                    <span className="admin-view-only"> — View Only</span>
+                  )}
+                </>
+              )}
+            </p>
+          </div>
+
+          {/* SEARCH BAR */}
+          <input
+            type="text"
+            className="admin-search"
+            placeholder="🔍 Search by name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
 
         {loading ? (
           <p className="admin-empty">Loading reservations...</p>
-        ) : reservations.length === 0 ? (
-          <p className="admin-empty">No reservations yet.</p>
+        ) : filteredAndSorted.length === 0 ? (
+          <p className="admin-empty">
+            {searchQuery ? `No reservations found for "${searchQuery}"` : "No reservations yet."}
+          </p>
         ) : (
           <table className="admin-table">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Name</th>
-                <th>Guests</th>
-                <th>Date</th>
+                <th
+                  className="sortable"
+                  onClick={() => handleSort("name")}
+                >
+                  Name{getSortIcon("name")}
+                </th>
+                <th
+                  className="sortable"
+                  onClick={() => handleSort("guests")}
+                >
+                  Guests{getSortIcon("guests")}
+                </th>
+                <th
+                  className="sortable"
+                  onClick={() => handleSort("date")}
+                >
+                  Date{getSortIcon("date")}
+                </th>
                 <th>Time</th>
                 {isAuthenticated && <th>Actions</th>}
               </tr>
             </thead>
             <tbody>
-              {reservations.map((res, index) => (
+              {filteredAndSorted.map((res, index) => (
                 <tr key={res.id}>
                   <td>{index + 1}</td>
                   <td>{res.name}</td>
                   <td>{res.guests}</td>
-                  <td>{res.date ? new Date(res.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}</td>
-                  <td>{res.time ? (() => { const [h, m] = res.time.split(":"); const hour = parseInt(h); return `${hour > 12 ? hour - 12 : hour}:${m} ${hour >= 12 ? "PM" : "AM"}`; })() : "—"}</td>
+                  <td>{formatDate(res.date)}</td>
+                  <td>{formatTime(res.time)}</td>
                   {isAuthenticated && (
                     <td>
-                      <button className="admin-btn-edit" onClick={() => handleEdit(res)}>Edit</button>
-                      <button className="admin-btn-delete" onClick={() => handleDelete(res.id)}>Delete</button>
+                      <button
+                        className="admin-btn-edit"
+                        onClick={() => handleEdit(res)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="admin-btn-delete"
+                        onClick={() => handleDelete(res.id)}
+                      >
+                        Delete
+                      </button>
                     </td>
                   )}
                 </tr>
