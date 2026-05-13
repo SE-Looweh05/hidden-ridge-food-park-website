@@ -282,7 +282,7 @@ function App() {
                 pointerEvents: buttonsLoaded && heroOpacity > 0.1 ? "auto" : "none",
               }}
             >
-              Dine with us
+              Reserve a Table
             </button>
           </div>
 
