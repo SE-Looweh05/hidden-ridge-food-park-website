@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 
-const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN;
-
 function AdminPanel() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState(false);
+  const [pinLoading, setPinLoading] = useState(false);
 
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,10 +17,18 @@ function AdminPanel() {
   const [editName, setEditName] = useState("");
   const [editGuests, setEditGuests] = useState("");
 
-  // SEARCH & SORT STATE
   const [searchQuery, setSearchQuery] = useState("");
   const [sortField, setSortField] = useState("id");
   const [sortDirection, setSortDirection] = useState("desc");
+
+  // CHECK LOCALSTORAGE FOR EXISTING TOKEN ON LOAD
+  useEffect(() => {
+    const savedToken = localStorage.getItem("admin_token");
+    if (savedToken) {
+      setToken(savedToken);
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const fetchReservations = async () => {
     setLoading(true);
@@ -40,17 +48,45 @@ function AdminPanel() {
     fetchReservations();
   }, []);
 
-  const handlePinSubmit = (e) => {
+  // LOGIN — sends password to backend, gets JWT token
+  const handlePinSubmit = async (e) => {
     e.preventDefault();
-    if (pinInput === ADMIN_PIN) {
+    setPinLoading(true);
+    setPinError(false);
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: pinInput }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setPinError(true);
+        setPinInput("");
+        return;
+      }
+
+      localStorage.setItem("admin_token", data.token);
+      setToken(data.token);
       setIsAuthenticated(true);
       setShowLoginModal(false);
-      setPinError(false);
       setPinInput("");
-    } else {
+    } catch (err) {
+      console.error("Login error:", err);
       setPinError(true);
-      setPinInput("");
+    } finally {
+      setPinLoading(false);
     }
+  };
+
+  // LOGOUT
+  const handleLogout = () => {
+    localStorage.removeItem("admin_token");
+    setToken(null);
+    setIsAuthenticated(false);
   };
 
   const handleDelete = (id) => {
@@ -62,6 +98,7 @@ function AdminPanel() {
     try {
       await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/reservations/${selectedId}`, {
         method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` },
       });
       fetchReservations();
       setShowDeleteModal(false);
@@ -82,7 +119,10 @@ function AdminPanel() {
     try {
       await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/reservations/${editId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
         body: JSON.stringify({ name: editName, guests: editGuests }),
       });
       fetchReservations();
@@ -92,7 +132,6 @@ function AdminPanel() {
     }
   };
 
-  // SORT HANDLER
   const handleSort = (field) => {
     if (sortField === field) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -102,13 +141,11 @@ function AdminPanel() {
     }
   };
 
-  // SORT ICON
   const getSortIcon = (field) => {
     if (sortField !== field) return " ↕";
     return sortDirection === "asc" ? " ↑" : " ↓";
   };
 
-  // FILTER + SORT
   const filteredAndSorted = reservations
     .filter((res) =>
       res.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -120,7 +157,7 @@ function AdminPanel() {
       if (sortField === "guests") {
         valA = Number(valA);
         valB = Number(valB);
-      } else if (sortField === "date") {
+      } else if (sortField === "date" || sortField === "created_at") {
         valA = valA ? new Date(valA) : new Date(0);
         valB = valB ? new Date(valB) : new Date(0);
       } else {
@@ -133,9 +170,8 @@ function AdminPanel() {
       return 0;
     });
 
-  // CSV EXPORT
   const exportCSV = () => {
-    const headers = ["#", "Name", "Guests", "Date", "Time"];
+    const headers = ["#", "Name", "Guests", "Date", "Time", "Created At"];
     const rows = filteredAndSorted.map((res, index) => [
       index + 1,
       res.name,
@@ -147,7 +183,8 @@ function AdminPanel() {
         const [h, m] = res.time.split(":");
         const hour = parseInt(h);
         return `${hour > 12 ? hour - 12 : hour}:${m} ${hour >= 12 ? "PM" : "AM"}`;
-      })() : "—"
+      })() : "—",
+      res.created_at ? new Date(res.created_at).toLocaleString("en-US") : "—"
     ]);
 
     const csvContent = [headers, ...rows]
@@ -163,7 +200,6 @@ function AdminPanel() {
     URL.revokeObjectURL(url);
   };
 
-  // FORMAT HELPERS
   const formatDate = (dateStr) => {
     if (!dateStr) return "—";
     return new Date(dateStr).toLocaleDateString("en-US", {
@@ -176,6 +212,18 @@ function AdminPanel() {
     const [h, m] = timeStr.split(":");
     const hour = parseInt(h);
     return `${hour > 12 ? hour - 12 : hour}:${m} ${hour >= 12 ? "PM" : "AM"}`;
+  };
+
+  const formatCreatedAt = (dateStr) => {
+    if (!dateStr) return "—";
+    return new Date(dateStr).toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
   };
 
   return (
@@ -191,10 +239,7 @@ function AdminPanel() {
               <button className="admin-export-btn" onClick={exportCSV}>
                 ⬇ Export CSV
               </button>
-              <button
-                className="admin-logout-btn"
-                onClick={() => setIsAuthenticated(false)}
-              >
+              <button className="admin-logout-btn" onClick={handleLogout}>
                 🔒 Lock
               </button>
             </>
@@ -225,8 +270,6 @@ function AdminPanel() {
               )}
             </p>
           </div>
-
-          {/* SEARCH BAR */}
           <input
             type="text"
             className="admin-search"
@@ -247,25 +290,19 @@ function AdminPanel() {
             <thead>
               <tr>
                 <th>#</th>
-                <th
-                  className="sortable"
-                  onClick={() => handleSort("name")}
-                >
+                <th className="sortable" onClick={() => handleSort("name")}>
                   Name{getSortIcon("name")}
                 </th>
-                <th
-                  className="sortable"
-                  onClick={() => handleSort("guests")}
-                >
+                <th className="sortable" onClick={() => handleSort("guests")}>
                   Guests{getSortIcon("guests")}
                 </th>
-                <th
-                  className="sortable"
-                  onClick={() => handleSort("date")}
-                >
+                <th className="sortable" onClick={() => handleSort("date")}>
                   Date{getSortIcon("date")}
                 </th>
                 <th>Time</th>
+                <th className="sortable" onClick={() => handleSort("created_at")}>
+                  Submitted{getSortIcon("created_at")}
+                </th>
                 {isAuthenticated && <th>Actions</th>}
               </tr>
             </thead>
@@ -277,6 +314,7 @@ function AdminPanel() {
                   <td>{res.guests}</td>
                   <td>{formatDate(res.date)}</td>
                   <td>{formatTime(res.time)}</td>
+                  <td>{formatCreatedAt(res.created_at)}</td>
                   {isAuthenticated && (
                     <td>
                       <button
@@ -318,7 +356,14 @@ function AdminPanel() {
                 <p className="pin-error">Incorrect password. Try again.</p>
               )}
               <div className="modal-actions">
-                <button type="submit" className="btn-primary">Login</button>
+                <button
+                  type="submit"
+                  className="btn-primary"
+                  disabled={pinLoading}
+                  style={{ opacity: pinLoading ? 0.7 : 1 }}
+                >
+                  {pinLoading ? "Logging in..." : "Login"}
+                </button>
                 <button
                   type="button"
                   className="btn-cancel"

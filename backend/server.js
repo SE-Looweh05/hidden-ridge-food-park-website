@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
+const jwt = require("jsonwebtoken");
 const { Pool } = require("pg");
 require("dotenv").config();
 
@@ -37,9 +38,44 @@ const reservationLimiter = rateLimit({
   message: { message: "Too many reservations from this device. Please try again later." }
 });
 
+// JWT MIDDLEWARE
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "Access denied. No token provided." });
+  }
+
+  try {
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    req.admin = verified;
+    next();
+  } catch (err) {
+    return res.status(403).json({ message: "Invalid or expired token." });
+  }
+};
+
 // TEST ROUTE
 app.get("/", (req, res) => {
   res.send("Backend connected to Supabase 🚀");
+});
+
+// ADMIN LOGIN
+app.post("/api/admin/login", (req, res) => {
+  const { password } = req.body;
+
+  if (!password || password !== process.env.ADMIN_PASSWORD) {
+    return res.status(401).json({ message: "Incorrect password." });
+  }
+
+  const token = jwt.sign(
+    { role: "admin" },
+    process.env.JWT_SECRET,
+    { expiresIn: "8h" }
+  );
+
+  res.json({ token });
 });
 
 // GET reservations
@@ -58,7 +94,6 @@ app.get("/api/reservations", async (req, res) => {
 // POST reservation
 app.post("/api/reservations", reservationLimiter, async (req, res) => {
   const { name, guests, date, time } = req.body;
-  console.log("Received:", { name, guests, date, time });
   const guestsNum = Number(guests);
 
   if (!name || !name.trim() || guestsNum <= 0 || !Number.isInteger(guestsNum)) {
@@ -81,8 +116,8 @@ app.post("/api/reservations", reservationLimiter, async (req, res) => {
   }
 });
 
-// PUT reservation
-app.put("/api/reservations/:id", async (req, res) => {
+// PUT reservation — protected
+app.put("/api/reservations/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
   const { name, guests, date, time } = req.body;
   const guestsNum = Number(guests);
@@ -103,9 +138,10 @@ app.put("/api/reservations/:id", async (req, res) => {
   }
 });
 
-// DELETE reservation
-app.delete("/api/reservations/:id", async (req, res) => {
+// DELETE reservation — protected
+app.delete("/api/reservations/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
+
   try {
     await pool.query("DELETE FROM reservations WHERE id = $1", [id]);
     res.json({ message: "Reservation deleted!" });
