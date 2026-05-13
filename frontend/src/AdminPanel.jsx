@@ -16,6 +16,8 @@ function AdminPanel() {
   const [editId, setEditId] = useState(null);
   const [editName, setEditName] = useState("");
   const [editGuests, setEditGuests] = useState("");
+  const [editDate, setEditDate] = useState("");
+  const [editTime, setEditTime] = useState("");
 
   const [searchQuery, setSearchQuery] = useState("");
   const [sortField, setSortField] = useState("id");
