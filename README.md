@@ -1,8 +1,7 @@
 # 🍽️ Hidden Ridge Food Park (Full-Stack Web App)
 
-Originally built as a static HTML/CSS/JS website, this project has been 
-progressively upgraded into a full-stack web application with a live 
-PostgreSQL database, deployed on Vercel (frontend) and Render (backend).
+A full-stack food park reservation system with admin dashboard, authentication, and business logic enforcement.  
+Originally built as a static HTML/CSS/JS project and progressively upgraded into a production-style full-stack application.
 
 ---
 
@@ -13,68 +12,84 @@ PostgreSQL database, deployed on Vercel (frontend) and Render (backend).
 
 ---
 
-## 🔧 Features
-
-- Full-stack reservation system with CRUD functionality
-- Date & time picker with business rules enforcement
-  - Tue–Sun, 3:00 PM–9:00 PM
-  - Monday closed
-  - Same-day booking requires +2 hour lead time
-- Rate limiting (3 reservations per IP/hour) to prevent abuse
-- Admin panel with authentication (view-only → edit/delete after login)
-- Real-time sync with Supabase PostgreSQL
-- REST API with input validation and error handling
-- Toast notifications (inline errors) + modal feedback system
-- Fully responsive UI with animations and smooth transitions
-
----
-
-## ⚙️ Tech Stack
-
-- **Frontend:** React.js (Vite), CSS, React Router DOM
-- **Backend:** Node.js, Express.js, express-rate-limit
-- **Database:** Supabase (PostgreSQL)
-- **API:** RESTful API (GET, POST, PUT, DELETE)
-- **Deployment:** Vercel (frontend), Render (backend)
-- **Tools:** Git, GitHub
-
----
-
-## 📌 Key Learnings
-
-- Built and deployed a full-stack application end-to-end
-- Designed and implemented a REST API with validation
-- Integrated Supabase PostgreSQL for cloud database management
-- Implemented client-server communication using Fetch API
-- Built a protected admin system with authentication logic
-- Applied rate limiting and business logic validation
-- Deployed production apps using Vercel and Render
-
----
-
 ## 🎬 Demo
 
-### 📋 Reservation System (User Flow & API Interaction)
+*The following demo GIFs were recorded before the latest UI/UX and feature improvements. Updated recordings will be added after the next update.*
+
+### Reservation System (User Flow)
 ![Reservation system demo](gifs/reservation.gif)
 
-### 🛠️ Admin Panel (Protected CRUD Operations)
-![Admin panel CRUD demo](gifs/admin.gif)
+### Admin Panel (CRUD + Auth)
+![Admin panel demo](gifs/admin.gif)
 
-### 🗄️ Live Database Sync (Supabase PostgreSQL)
-![Live database sync demo](gifs/db-sync.gif)
+### Live Database Sync
+![Database sync demo](gifs/db-sync.gif)
 
-### 🎨 UI/UX Experience (Animations & Responsiveness)
-![UI/UX animations and responsiveness demo](gifs/uiux.gif)
+### UI/UX Experience
+![UI/UX demo](gifs/uiux.gif)
 
 ---
 
-## 🚧 Future Plans
+## 🔥 Features
 
-- Clickable food stall cards with full menu modal
-- Improved mobile layout for food stalls section
-- Search and filter reservations in admin panel
-- Export reservations as CSV from admin panel
-- Move admin authentication to backend with JWT tokens
+### Core System
+- Full-stack reservation system (Create, Read, Update, Delete)
+- JWT authentication with protected admin dashboard
+- Business rules enforcement:
+  - Tue–Sun, 3:00 PM–9:00 PM booking window
+  - Monday fully blocked
+  - Same-day bookings require +2 hour lead time
+- Rate limiting (3 reservations per IP/hour)
+- Real-time PostgreSQL sync via Supabase
+
+### Admin Panel
+- Public view-only access to reservations
+- Admin-only edit and delete functionality
+- Search reservations by name (real-time)
+- Sort by name, guests, reservation date, or created_at
+- CSV export (admin-only)
+
+### User Experience
+- Reservation confirmation modal
+- Toast notifications for form errors (auto-dismiss)
+- Error modal for failed requests / rate limits
+- Fully responsive UI (desktop, tablet, mobile)
+- Smooth animations and transitions
+
+---
+
+## ⚙️ System & Architecture
+
+- REST API (GET, POST, PUT, DELETE)
+- Input validation and error handling middleware
+- Supabase PostgreSQL database integration
+- JWT-based authentication (backend secured)
+- Session persistence using localStorage
+- Environment variables for sensitive data
+- Supabase keep-alive system (prevents free-tier sleep)
+- Deployed on Vercel (frontend) and Render (backend)
+
+---
+
+## 🧠 Key Learnings
+
+- Built and deployed a full-stack application end-to-end
+- Designed REST API with authentication and middleware
+- Implemented real-world business logic constraints
+- Integrated PostgreSQL (Supabase) with backend API
+- Managed client-server communication using Fetch API
+- Built secure admin authentication system using JWT
+- Applied rate limiting and request protection strategies
+- Learned production deployment workflow (Vercel + Render)
+
+---
+
+## 🚧 Future Improvements
+
+- Clickable food stall menu modal system
+- Improved mobile UX for browsing stalls
+- Token expiry handling with automatic logout on admin panel
+- Reservation conflict detection (time overlap prevention)
 
 ---
 
@@ -105,11 +120,12 @@ Runs at: `http://localhost:5000`
 Create a `.env` file inside `frontend/`:
 ```
 VITE_BACKEND_URL=http://localhost:5000
-VITE_ADMIN_PIN=your_admin_password
 ```
 Create a `.env` file inside your `backend/` folder:
 ```
 DATABASE_URL=your_supabase_connection_string
+ADMIN_PASSWORD=your_admin_password
+JWT_SECRET=your_jwt_secret
 ```
 
 ---
@@ -120,8 +136,9 @@ DATABASE_URL=your_supabase_connection_string
 |--------|----------|-------------|
 | GET | /api/reservations | Fetch all reservations |
 | POST | /api/reservations | Add a new reservation (rate limited) |
-| PUT | /api/reservations/:id | Edit a reservation |
-| DELETE | /api/reservations/:id | Delete a reservation |
+| PUT | /api/reservations/:id | Edit a reservation (JWT protected) |
+| DELETE | /api/reservations/:id | Delete a reservation (JWT protected) |
+| POST | /api/admin/login | Admin login — returns JWT token |
 
 ---
 
