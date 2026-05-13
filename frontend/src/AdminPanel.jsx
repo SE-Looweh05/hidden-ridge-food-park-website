@@ -21,13 +21,14 @@ function AdminPanel() {
   const [sortField, setSortField] = useState("id");
   const [sortDirection, setSortDirection] = useState("desc");
 
-  // CHECK LOCALSTORAGE FOR EXISTING TOKEN ON LOAD
+  // CHECK LOCALSTORAGE + WAKE UP RENDER ON PAGE LOAD
   useEffect(() => {
     const savedToken = localStorage.getItem("admin_token");
     if (savedToken) {
       setToken(savedToken);
       setIsAuthenticated(true);
     }
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/`).catch(() => {});
   }, []);
 
   const fetchReservations = async () => {
@@ -112,6 +113,8 @@ function AdminPanel() {
     setEditId(res.id);
     setEditName(res.name);
     setEditGuests(res.guests);
+    setEditDate(res.date || "");
+    setEditTime(res.time || "");
     setShowEditModal(true);
   };
 
@@ -123,7 +126,12 @@ function AdminPanel() {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({ name: editName, guests: editGuests }),
+        body: JSON.stringify({ 
+          name: editName, 
+          guests: editGuests,
+          date: editDate,
+          time: editTime,
+        }),
       });
       fetchReservations();
       setShowEditModal(false);
