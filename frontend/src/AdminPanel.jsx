@@ -33,6 +33,31 @@ function AdminPanel() {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/`).catch(() => {});
   }, []);
 
+  // AUTO LOGOUT AFTER 30 MINUTES OF INACTIVITY
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    let timer;
+
+    const resetTimer = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        localStorage.removeItem("admin_token");
+        setToken(null);
+        setIsAuthenticated(false);
+      }, 30 * 60 * 1000);
+    };
+
+    const events = ["mousemove", "keydown", "click", "scroll"];
+    events.forEach((e) => window.addEventListener(e, resetTimer));
+    resetTimer();
+
+    return () => {
+      clearTimeout(timer);
+      events.forEach((e) => window.removeEventListener(e, resetTimer));
+    };
+  }, [isAuthenticated]);
+
   const fetchReservations = async () => {
     setLoading(true);
     try {
@@ -51,7 +76,7 @@ function AdminPanel() {
     fetchReservations();
   }, []);
 
-  // LOGIN — sends password to backend, gets JWT token
+// LOGIN - sends password to backend, gets JWT token
   const handlePinSubmit = async (e) => {
     e.preventDefault();
     setPinLoading(true);
@@ -128,8 +153,8 @@ function AdminPanel() {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify({ 
-          name: editName, 
+        body: JSON.stringify({
+          name: editName,
           guests: editGuests,
           date: editDate,
           time: editTime,
