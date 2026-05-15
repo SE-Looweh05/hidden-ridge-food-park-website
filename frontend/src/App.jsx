@@ -111,6 +111,12 @@ function App() {
     };
   }, []);
 
+  // WAKE UP RENDER ON PAGE LOAD
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/`)
+      .catch(() => {});
+  }, []);
+
   // SCROLL HANDLER
   useEffect(() => {
     const handleScroll = () => {
