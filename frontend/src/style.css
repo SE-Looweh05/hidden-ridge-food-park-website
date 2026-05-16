@@ -690,7 +690,7 @@ body {
     padding: 0px 10px;
   }
 
-  /* STALLS — stack vertically on mobile */
+  /* STALLS — 2 column grid on mobile */
   .stalls-section {
     flex-direction: column;
     justify-content: flex-start;
@@ -700,12 +700,6 @@ body {
   }
 
   .stalls-bg-img {
-    width: 300px;
-    height: 400px;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-    opacity: 0 !important;
     display: none;
   }
 
@@ -727,14 +721,30 @@ body {
   }
 
   .stall-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     width: 100%;
+    column-gap: 12px;
+    row-gap: 12px;
   }
 
   .stall-card {
     width: 100%;
     height: auto;
-    min-height: 200px;
+    min-height: 220px;
+  }
+
+  .stall-logo {
+    max-height: 130px;
+  }
+
+  .stall-logo img {
+    max-height: 100px;
+  }
+
+  .stall-description {
+    font-size: 11px;
+    padding: 8px 10px;
+    line-height: 1.5;
   }
 
   .stall-logo { max-height: 160px; }
@@ -981,6 +991,17 @@ body {
   opacity: 1 !important;
 }
 
+.form-error-summary {
+  background: rgba(229, 57, 53, 0.15);
+  border: 1px solid #e53935;
+  color: #e53935;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
 /* ============================= */
 /* CONFIRMATION MODAL */
 /* ============================= */
@@ -1088,4 +1109,29 @@ body {
 .admin-export-btn:hover {
   background: #ffbd59;
   color: black;
+}
+
+/* ============================= */
+/* SKELETON LOADER */
+/* ============================= */
+
+.skeleton-row {
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.skeleton-cell {
+  height: 14px;
+  border-radius: 4px;
+  background: #2a2a2a;
+  animation: skeletonPulse 1.4s ease-in-out infinite;
+}
+
+.skeleton-cell.short { width: 40px; }
+.skeleton-cell.medium { width: 100px; }
+.skeleton-cell.long { width: 160px; }
+
+@keyframes skeletonPulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
 }

@@ -14,6 +14,7 @@ function App() {
   const [toasts, setToasts] = useState([]);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [formErrors, setFormErrors] = useState({});
 
   // SCROLL-BASED OPACITY STATE
   const [heroOpacity, setHeroOpacity] = useState(1);
@@ -161,27 +162,32 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const guestsNum = Number(guests);
+    const errors = {};
 
-    if (!name.trim() || guestsNum <= 0 || !Number.isInteger(guestsNum)) {
-      showToast("Please enter a valid name and number of guests.", "error");
-      return;
+    if (!name.trim()) {
+      errors.name = "Please enter your name.";
+    }
+
+    if (!guests || guestsNum <= 0 || !Number.isInteger(guestsNum)) {
+      errors.guests = "Please enter a valid number of guests.";
     }
 
     if (!date) {
-      showToast("Please select a date.", "error");
-      return;
-    }
-
-    if (isMonday(date)) {
-      showToast("We are closed on Mondays. Please select another date.", "error");
-      return;
+      errors.date = "Please select a date.";
+    } else if (isMonday(date)) {
+      errors.date = "We are closed on Mondays. Please select another date.";
     }
 
     if (!time) {
-      showToast("Please select a time.", "error");
+      errors.time = "Please select a time.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
       return;
     }
-    console.log("Submitting:", { name, guests, date, time });
+
+    setFormErrors({});
     setIsSubmitting(true);
 
     try {
@@ -200,7 +206,6 @@ function App() {
         return;
       }
 
-      // Show confirmation modal
       setConfirmedReservation({ name, guests, date, time });
       setShowModal(false);
       setShowConfirmModal(true);
@@ -211,7 +216,9 @@ function App() {
 
     } catch (err) {
       console.error(err);
-      showToast("Something went wrong. Please try again.", "error");
+      setErrorMessage("Something went wrong. Please try again.");
+      setShowModal(false);
+      setShowErrorModal(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -407,21 +414,37 @@ function App() {
           <div className="modal">
             <h2>Reserve a Table</h2>
             <form onSubmit={handleSubmit}>
+
+              {/* SUMMARY ERROR — above submit */}
+              {Object.keys(formErrors).length > 0 && (
+                <div className="form-error-summary">
+                  Please fix the errors below before submitting.
+                </div>
+              )}
+
               <input
                 type="text"
                 placeholder="Your Name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (formErrors.name) setFormErrors((prev) => ({ ...prev, name: "" }));
+                }}
               />
+              {formErrors.name && <p className="field-error">{formErrors.name}</p>}
+
               <input
                 type="number"
                 placeholder="Number of Guests"
                 value={guests}
                 min="1"
-                onChange={(e) => setGuests(e.target.value)}
-                required
+                onChange={(e) => {
+                  setGuests(e.target.value);
+                  if (formErrors.guests) setFormErrors((prev) => ({ ...prev, guests: "" }));
+                }}
               />
+              {formErrors.guests && <p className="field-error">{formErrors.guests}</p>}
+
               <input
                 type="date"
                 value={date}
@@ -429,16 +452,17 @@ function App() {
                 onChange={(e) => {
                   setDate(e.target.value);
                   setTime("");
+                  if (formErrors.date) setFormErrors((prev) => ({ ...prev, date: "" }));
                 }}
-                required
               />
-              {date && isMonday(date) && (
-                <p className="field-error">We are closed on Mondays. Please select another date.</p>
-              )}
+              {formErrors.date && <p className="field-error">{formErrors.date}</p>}
+
               <select
                 value={time}
-                onChange={(e) => setTime(e.target.value)}
-                required
+                onChange={(e) => {
+                  setTime(e.target.value);
+                  if (formErrors.time) setFormErrors((prev) => ({ ...prev, time: "" }));
+                }}
                 disabled={!date || isMonday(date) || availableTimes.length === 0}
               >
                 <option value="">Select a time</option>
@@ -446,9 +470,11 @@ function App() {
                   <option key={t} value={t}>{formatTime(t)}</option>
                 ))}
               </select>
+              {formErrors.time && <p className="field-error">{formErrors.time}</p>}
               {date && !isMonday(date) && availableTimes.length === 0 && (
                 <p className="field-error">No available times for today. Please select another date.</p>
               )}
+
               <button
                 type="submit"
                 className="btn-primary"
@@ -463,7 +489,10 @@ function App() {
               <button
                 type="button"
                 className="btn-cancel"
-                onClick={() => setShowModal(false)}
+                onClick={() => {
+                  setShowModal(false);
+                  setFormErrors({});
+                }}
                 disabled={isSubmitting}
                 style={{
                   opacity: isSubmitting ? 0.5 : 1,
