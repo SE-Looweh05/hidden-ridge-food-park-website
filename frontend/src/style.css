@@ -704,15 +704,21 @@ body {
   }
 
   .stalls-title {
-    position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
     text-align: center;
-    font-size: 26px;
+    font-size: 28px !important;
     margin-top: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     z-index: 2;
+    white-space: nowrap;
+    letter-spacing: 1px;
+  }
+
+  .stalls-title br {
+    display: none;
   }
 
   .stall-grid-wrapper {

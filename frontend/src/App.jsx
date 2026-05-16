@@ -348,7 +348,7 @@ function App() {
               className={`stalls-bg-img ${stallsOpacity > 0.05 ? "img-visible" : ""}`}
             />
             <h2 className={`stalls-title ${stallsContentVisible ? "content-rise" : "content-hidden"}`}>
-              Explore<br />Our Food<br />Stalls
+              Explore <br />Our Food <br />Stalls
             </h2>
             <div className="stall-grid-wrapper">
               <div className="stall-grid">
