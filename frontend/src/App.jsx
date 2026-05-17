@@ -456,6 +456,9 @@ function App() {
                 }}
               />
               {formErrors.date && <p className="field-error">{formErrors.date}</p>}
+              {date && isMonday(date) && !formErrors.date && (
+                <p className="field-error">We are closed on Mondays. Please select another date.</p>
+              )}
 
               <select
                 value={time}
