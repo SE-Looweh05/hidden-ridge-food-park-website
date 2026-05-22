@@ -117,6 +117,18 @@ function AdminPanel() {
     setIsAuthenticated(false);
   };
 
+  // HANDLE EXPIRED TOKEN
+  const handleExpiredToken = (status) => {
+    if (status === 401 || status === 403) {
+      localStorage.removeItem("admin_token");
+      setToken(null);
+      setIsAuthenticated(false);
+      alert("Your session has expired. Please log in again.");
+      return true;
+    }
+    return false;
+  };
+
   const handleDelete = (id) => {
     setSelectedId(id);
     setShowDeleteModal(true);
@@ -124,10 +136,11 @@ function AdminPanel() {
 
   const confirmDelete = async () => {
     try {
-      await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/reservations/${selectedId}`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/reservations/${selectedId}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` },
       });
+      if (handleExpiredToken(res.status)) return;
       fetchReservations();
       setShowDeleteModal(false);
       setSelectedId(null);
@@ -147,7 +160,7 @@ function AdminPanel() {
 
   const confirmEdit = async () => {
     try {
-      await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/reservations/${editId}`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/reservations/${editId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -160,6 +173,7 @@ function AdminPanel() {
           time: editTime,
         }),
       });
+      if (handleExpiredToken(res.status)) return;
       fetchReservations();
       setShowEditModal(false);
     } catch (err) {
