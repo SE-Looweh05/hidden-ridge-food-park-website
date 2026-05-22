@@ -14,8 +14,6 @@ Originally built as a static HTML/CSS/JS project and progressively upgraded into
 
 ## 🎬 Demo
 
-*The following demo GIFs were recorded before the latest UI/UX and feature improvements. Updated recordings will be added after the next update.*
-
 ### Reservation System (User Flow)
 ![Reservation system demo](gifs/reservation.gif)
 
