@@ -86,10 +86,16 @@ Originally built as a static HTML/CSS/JS project and progressively upgraded into
 
 ## 🚧 Future Improvements
 
-- Clickable food stall menu modal system
+- Clickable food stall cards with full menu and price modal
 - Improved mobile UX for browsing stalls
-- Token expiry handling with automatic logout on admin panel
-- Reservation conflict detection (time overlap prevention)
+- Reservation conflict detection (prevent double booking same time slot)
+- Email confirmation sent to guest after successful reservation
+- Reservation cancellation system for guests (cancel via unique link)
+- Admin dashboard with reservation statistics (total guests, peak hours, busiest days)
+- Pagination or infinite scroll for admin panel with large reservation lists
+- Dark/light mode toggle for the main website
+- Gallery section showcasing food park photos and ambiance
+- Contact form that sends inquiries directly to the owner's email
 
 ---
 
