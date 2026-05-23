@@ -136,7 +136,7 @@ const buildConfirmationEmail = (name, guests, date, time) => {
                     <tr>
                       <td style="padding:20px;">
                         <p style="color:#ffbd59;font-size:13px;font-weight:bold;margin:0 0 8px;letter-spacing:1px;">🕒 BUSINESS HOURS</p>
-                        <p style="color:white;margin:0;font-size:14px;">Tuesday to Saturday: 3:00 PM – 12:00 MN<br><span style="color:#e53935;">Monday: CLOSED</span></p>
+                        <p style="color:white;margin:0;font-size:14px;">Tuesday to Sunday: 3:00 PM – 12:00 MN<br><span style="color:#e53935;">Monday: CLOSED</span></p>
                       </td>
                     </tr>
                   </table>
