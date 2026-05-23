@@ -419,7 +419,7 @@ body {
   background: #1e1e1e;
   padding: 30px;
   border-radius: 12px;
-  width: 320px;
+  width: 420px;
   text-align: center;
   color: white;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -765,7 +765,7 @@ body {
   .end-column h3 { font-size: 16px; }
   .end-column p { font-size: 13px; }
   .social-img { width: 100px; }
-  .modal { width: 90vw; }
+  .modal { width: 95vw; }
 
   .admin-header {
     flex-direction: column;
