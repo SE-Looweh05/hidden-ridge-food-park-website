@@ -220,11 +220,12 @@ function AdminPanel() {
     });
 
   const exportCSV = () => {
-    const headers = ["#", "Name", "Guests", "Date", "Time", "Created At"];
+    const headers = ["#", "Name", "Guests", "Email", "Date", "Time", "Created At"];
     const rows = filteredAndSorted.map((res, index) => [
       index + 1,
       res.name,
       res.guests,
+      res.email || "—",
       res.date ? new Date(res.date).toLocaleDateString("en-US", {
         month: "short", day: "numeric", year: "numeric"
       }) : "—",
@@ -335,6 +336,7 @@ function AdminPanel() {
                 <th>#</th>
                 <th>Name</th>
                 <th>Guests</th>
+                <th>Email</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Submitted</th>
@@ -347,6 +349,7 @@ function AdminPanel() {
                   <td><div className="skeleton-cell short" /></td>
                   <td><div className="skeleton-cell medium" /></td>
                   <td><div className="skeleton-cell short" /></td>
+                  <td><div className="skeleton-cell long" /></td>
                   <td><div className="skeleton-cell medium" /></td>
                   <td><div className="skeleton-cell short" /></td>
                   <td><div className="skeleton-cell long" /></td>
@@ -370,6 +373,9 @@ function AdminPanel() {
                 <th className="sortable" onClick={() => handleSort("guests")}>
                   Guests{getSortIcon("guests")}
                 </th>
+                <th className="sortable" onClick={() => handleSort("email")}>
+                  Email{getSortIcon("email")}
+                </th>
                 <th className="sortable" onClick={() => handleSort("date")}>
                   Date{getSortIcon("date")}
                 </th>
@@ -386,6 +392,7 @@ function AdminPanel() {
                   <td>{index + 1}</td>
                   <td>{res.name}</td>
                   <td>{res.guests}</td>
+                  <td>{res.email || "—"}</td>
                   <td>{formatDate(res.date)}</td>
                   <td>{formatTime(res.time)}</td>
                   <td>{formatCreatedAt(res.created_at)}</td>

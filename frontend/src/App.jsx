@@ -15,6 +15,7 @@ function App() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [formErrors, setFormErrors] = useState({});
+  const [email, setEmail] = useState("");
 
   // SCROLL-BASED OPACITY STATE
   const [heroOpacity, setHeroOpacity] = useState(1);
@@ -182,6 +183,12 @@ function App() {
       errors.time = "Please select a time.";
     }
 
+    if (!email.trim()) {
+      errors.email = "Please enter your email address.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.email = "Please enter a valid email address.";
+    }
+
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       return;
@@ -194,7 +201,7 @@ function App() {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/reservations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, guests, date, time }),
+        body: JSON.stringify({ name, guests, date, time, email }),
       });
 
       const data = await res.json();
@@ -206,13 +213,14 @@ function App() {
         return;
       }
 
-      setConfirmedReservation({ name, guests, date, time });
+      setConfirmedReservation({ name, guests, date, time, email });
       setShowModal(false);
       setShowConfirmModal(true);
       setName("");
       setGuests("");
       setDate("");
       setTime("");
+      setEmail("");
 
     } catch (err) {
       console.error(err);
@@ -434,6 +442,17 @@ function App() {
               {formErrors.name && <p className="field-error">{formErrors.name}</p>}
 
               <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (formErrors.email) setFormErrors((prev) => ({ ...prev, email: "" }));
+                }}
+              />
+              {formErrors.email && <p className="field-error">{formErrors.email}</p>}
+
+              <input
                 type="number"
                 placeholder="Number of Guests"
                 value={guests}
@@ -495,6 +514,7 @@ function App() {
                 onClick={() => {
                   setShowModal(false);
                   setFormErrors({});
+                  setEmail("");
                 }}
                 disabled={isSubmitting}
                 style={{
@@ -519,6 +539,10 @@ function App() {
               <div className="confirm-row">
                 <span className="confirm-label">Name: </span>
                 <span className="confirm-value">{confirmedReservation.name}</span>
+              </div>
+              <div className="confirm-row">
+                <span className="confirm-label">Email: </span>
+                <span className="confirm-value">{confirmedReservation.email}</span>
               </div>
               <div className="confirm-row">
                 <span className="confirm-label">Guests: </span>
