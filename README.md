@@ -40,6 +40,12 @@ Originally built as a static HTML/CSS/JS project and progressively upgraded into
 - Rate limiting (3 reservations per IP/hour)
 - Real-time PostgreSQL sync via Supabase
 
+### 📧 Email Confirmation System
+- Automated reservation confirmation emails using the Resend API
+- Styled HTML email template with reservation details and Hidden Ridge branding
+- Guest email storage integrated into Supabase, admin table, and CSV export
+- Production-ready implementation with support for custom domain email delivery
+
 ### Admin Panel
 - Public view-only access to reservations
 - Admin-only edit and delete functionality
@@ -87,13 +93,11 @@ Originally built as a static HTML/CSS/JS project and progressively upgraded into
 - Clickable food stall cards with full menu and price modal
 - Improved mobile UX for browsing stalls
 - Reservation conflict detection (prevent double booking same time slot)
-- Email confirmation sent to guest after successful reservation
 - Reservation cancellation system for guests (cancel via unique link)
 - Admin dashboard with reservation statistics (total guests, peak hours, busiest days)
 - Pagination or infinite scroll for admin panel with large reservation lists
 - Dark/light mode toggle for the main website
 - Gallery section showcasing food park photos and ambiance
-- Contact form that sends inquiries directly to the owner's email
 
 ---
 
