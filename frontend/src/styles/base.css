@@ -1,0 +1,72 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: black;
+  overflow-x: hidden;
+}
+
+/* ============================= */
+/* SCROLL CONTAINER */
+/* ============================= */
+
+.scroll-container {
+  height: 400vh;
+  position: relative;
+}
+
+/* ============================= */
+/* FIXED LAYERS */
+/* ============================= */
+
+.fixed-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.black-base {
+  background: black;
+  z-index: 0;
+}
+
+/* ============================= */
+/* ANIMATIONS */
+/* ============================= */
+
+.content-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.content-rise {
+  animation: riseIn 0.8s ease forwards;
+}
+
+.content-rise-delay {
+  animation: riseIn 0.8s ease 0.25s forwards;
+  opacity: 0;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

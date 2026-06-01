@@ -1,0 +1,343 @@
+/* ============================= */
+/* ADMIN PANEL PAGE */
+/* ============================= */
+
+.admin-page {
+  position: relative;
+  z-index: 99999;
+  min-height: 100vh;
+  background: #111;
+  color: white;
+  padding: 0;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 50px;
+  background: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+.admin-header h1 {
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+
+.admin-back-btn {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.admin-back-btn:hover { color: white; }
+
+.admin-content { padding: 40px 50px; }
+
+.admin-content h2 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.admin-count {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 30px;
+}
+
+.admin-empty {
+  color: #666;
+  font-size: 15px;
+  margin-top: 20px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.admin-table thead tr {
+  background: #222;
+  border-bottom: 2px solid #444;
+}
+
+.admin-table th {
+  padding: 14px 20px;
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #ccc;
+}
+
+.admin-table tbody tr {
+  border-bottom: 1px solid #2a2a2a;
+  transition: background 0.2s ease;
+}
+
+.admin-table tbody tr:hover { background: #1c1c1c; }
+
+.admin-table td {
+  padding: 14px 20px;
+  color: #ddd;
+}
+
+.admin-btn-edit {
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 8px;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+
+.admin-btn-edit:hover { background: #1565c0; }
+
+.admin-btn-delete {
+  background: #e53935;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+
+.admin-btn-delete:hover { background: #c62828; }
+
+/* ============================= */
+/* ADMIN PIN SCREEN */
+/* ============================= */
+
+.admin-pin-screen {
+  min-height: 100vh;
+  background: #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-pin-box {
+  background: #1e1e1e;
+  padding: 40px;
+  border-radius: 12px;
+  width: 320px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.admin-pin-box h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.admin-pin-box p {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 24px;
+}
+
+.admin-pin-box input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+  background: #2a2a2a;
+  color: white;
+}
+
+.pin-error {
+  color: #e53935;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.admin-pin-btn {
+  width: 100%;
+  padding: 12px;
+  background: #ffbd59;
+  color: black;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.2s ease;
+}
+
+.admin-pin-btn:hover {
+  background: #f0a500;
+}
+
+.admin-logout-btn {
+  background: #333;
+  color: #aaa;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-logout-btn:hover {
+  background: #444;
+  color: white;
+}
+
+.admin-login-btn {
+  background: #ffbd59;
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.admin-login-btn:hover {
+  background: #f0a500;
+}
+
+.admin-view-only {
+  color: #888;
+  font-style: italic;
+  margin-left: 6px;
+}
+
+/* ============================= */
+/* ADMIN SEARCH & SORT */
+/* ============================= */
+
+.admin-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-search {
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1a1a1a;
+  color: white;
+  font-size: 14px;
+  width: 260px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.admin-search:focus {
+  border-color: #ffbd59;
+}
+
+.admin-search::placeholder {
+  color: #666;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.sortable:hover {
+  color: #ffbd59;
+}
+
+.admin-export-btn {
+  background: #2a2a2a;
+  color: #ffbd59;
+  border: 1px solid #ffbd59;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-export-btn:hover {
+  background: #ffbd59;
+  color: black;
+}
+
+/* ============================= */
+/* SKELETON LOADER */
+/* ============================= */
+
+.skeleton-row {
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.skeleton-cell {
+  height: 14px;
+  border-radius: 4px;
+  background: #2a2a2a;
+  animation: skeletonPulse 1.4s ease-in-out infinite;
+}
+
+.skeleton-cell.short { width: 40px; }
+.skeleton-cell.medium { width: 100px; }
+.skeleton-cell.long { width: 160px; }
+
+@keyframes skeletonPulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+@media (max-width: 1024px) {
+  .admin-header { padding: 20px 30px; }
+  .admin-content { padding: 30px; }
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .admin-content { padding: 20px; }
+  .admin-table { font-size: 13px; }
+
+  .admin-table th,
+  .admin-table td { padding: 10px 12px; }
+
+  .admin-btn-edit,
+  .admin-btn-delete {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-table th:first-child,
+  .admin-table td:first-child { display: none; }
+}
+
+/* hide animations on admin */
+.admin-page ~ .fixed-layer {
+  display: none;
+}

@@ -1,0 +1,209 @@
+/* ============================= */
+/* FOOD STALLS SECTION */
+/* ============================= */
+
+.stalls-section {
+  background: transparent;
+  padding: 0;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.stalls-content-layer {
+  z-index: 12;
+  overflow-y: auto;
+  transition: opacity 0.08s linear;
+}
+
+/* FS-IMG — background decorative image */
+.stalls-bg-img {
+  position: absolute;
+  top: 50%;
+  right: -10%;
+  transform: translateY(-50%);
+  width: 931px;
+  height: 1157px;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+
+.stalls-bg-img.img-visible {
+  opacity: 0.3;
+}
+
+/* TITLE — absolutely positioned, freely adjustable */
+.stalls-title {
+  position: absolute;
+  left: 10%;
+  top: 35%;
+  transform: translateY(-50%);
+  color: #ffbd59;
+  font-size: 85px;
+  line-height: 1.2;
+  letter-spacing: 2px;
+  text-align: center;
+  text-transform: none;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* STALL GRID — pushed to the right */
+.stall-grid-wrapper {
+  position: relative;
+  z-index: 2;
+  margin-right: 10%;
+  width: 78%;
+  flex-shrink: 0;
+}
+
+.stall-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 260px);
+  column-gap: 40px;
+  row-gap: 40px;
+  width: fit-content;
+  margin-left: auto;
+}
+
+.stall-card {
+  border: 2px solid white;
+  width: 260px;
+  height: 370px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  flex-shrink: 0;
+  gap: 10px;
+}
+
+.stall-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.2);
+  z-index: 100;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stall-logo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  max-height: 240px;
+}
+
+.stall-logo img {
+  max-width: 110%;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+.stall-description {
+  color: white;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.7;
+  border-top: 1px solid white;
+}
+
+@media (max-width: 1024px) {
+  .stalls-bg-img {
+    width: 600px;
+    height: 800px;
+    left: -8%;
+  }
+
+  .stalls-title {
+    font-size: 38px;
+    left: 3%;
+  }
+
+  .stall-grid-wrapper {
+    width: auto;
+    margin-right: 2%;
+  }
+
+  .stall-grid {
+    grid-template-columns: repeat(3, 200px);
+  }
+
+  .stall-card {
+    width: 200px;
+    height: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* STALLS — 2 column grid on mobile */
+  .stalls-section {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-y: auto;
+    padding: 20px 15px;
+  }
+
+  .stalls-bg-img {
+    display: none;
+  }
+
+  .stalls-title {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    text-align: center;
+    font-size: 28px !important;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    z-index: 2;
+    white-space: nowrap;
+    letter-spacing: 1px;
+  }
+
+  .stalls-title br {
+    display: none;
+  }
+
+  .stall-grid-wrapper {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .stall-grid {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    column-gap: 12px;
+    row-gap: 12px;
+  }
+
+  .stall-card {
+    width: 100%;
+    height: auto;
+    min-height: 220px;
+  }
+
+  .stall-description {
+    font-size: 11px;
+    padding: 8px 10px;
+    line-height: 1.5;
+  }
+
+  .stall-logo { max-height: 160px; }
+  .stall-logo img { max-height: 130px; }
+}
+
+@media (max-width: 480px) {
+  .stalls-title { font-size: 18px; }
+}
