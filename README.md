@@ -159,8 +159,49 @@ Hidden-Ridge-Food-Park-Website/
 ├── frontend/
 │   ├── public/
 │   ├── src/
+│   │   ├── components/
+│   │   │   ├── admin/
+│   │   │   │   ├── AdminHeader.jsx
+│   │   │   │   ├── DeleteModal.jsx
+│   │   │   │   ├── EditModal.jsx
+│   │   │   │   ├── LoginModal.jsx
+│   │   │   │   ├── ReservationTable.jsx
+│   │   │   │   ├── SearchBar.jsx
+│   │   │   │   └── SkeletonLoader.jsx
+│   │   │   ├── common/
+│   │   │   │   ├── Toast.jsx
+│   │   │   │   └── ToastContainer.jsx
+│   │   │   ├── layout/
+│   │   │   │   ├── CafeSection.jsx
+│   │   │   │   ├── FooterSection.jsx
+│   │   │   │   └── HeroSection.jsx
+│   │   │   ├── reservation/
+│   │   │   │   ├── ConfirmationModal.jsx
+│   │   │   │   ├── ErrorModal.jsx
+│   │   │   │   └── ReservationModal.jsx
+│   │   │   └── stalls/
+│   │   │       ├── FoodStallsSection.jsx
+│   │   │       └── StallCard.jsx
+│   │   ├── hooks/
+│   │   │   ├── useAdminAuth.js
+│   │   │   └── useScrollFade.js
+│   │   ├── pages/
+│   │   │   ├── AdminPage.jsx
+│   │   │   └── HomePage.jsx
+│   │   ├── styles/
+│   │   │   ├── admin.css
+│   │   │   ├── base.css
+│   │   │   ├── cafe.css
+│   │   │   ├── footer.css
+│   │   │   ├── hero.css
+│   │   │   ├── modal.css
+│   │   │   ├── reservation.css
+│   │   │   ├── stalls.css
+│   │   │   └── toast.css
+│   │   ├── utils/
+│   │   │   ├── csvExport.js
+│   │   │   └── dateUtils.js
 │   │   ├── App.jsx
-│   │   ├── AdminPanel.jsx
 │   │   ├── main.jsx
 │   │   └── style.css
 │   ├── vercel.json
