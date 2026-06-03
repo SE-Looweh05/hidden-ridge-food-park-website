@@ -16,6 +16,7 @@ function AdminPage() {
     pinError, setPinError,
     pinLoading,
     handlePinSubmit, handleLogout, handleExpiredToken,
+    showSessionExpiredModal, setShowSessionExpiredModal,
   } = useAdminAuth();
 
   const [reservations, setReservations] = useState([]);
@@ -163,6 +164,28 @@ function AdminPage() {
           onSave={confirmEdit}
           onClose={() => setShowEditModal(false)}
         />
+      )}
+
+      {/* SESSION EXPIRED MODAL */}
+      {showSessionExpiredModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="confirm-icon">🔒</div>
+            <h2>Session Expired</h2>
+            <p style={{ opacity: 1, marginBottom: "20px" }}>
+              Your session has expired. Please log in again to continue.
+            </p>
+            <button
+              className="btn-primary"
+              onClick={() => {
+                setShowSessionExpiredModal(false);
+                setShowLoginModal(true);
+              }}
+            >
+              Log In Again
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -7,6 +7,7 @@ export const useAdminAuth = () => {
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState(false);
   const [pinLoading, setPinLoading] = useState(false);
+  const [showSessionExpiredModal, setShowSessionExpiredModal] = useState(false);
 
   // CHECK LOCALSTORAGE + WAKE UP RENDER ON PAGE LOAD
   useEffect(() => {
@@ -75,7 +76,7 @@ export const useAdminAuth = () => {
       localStorage.removeItem("admin_token");
       setToken(null);
       setIsAuthenticated(false);
-      alert("Your session has expired. Please log in again.");
+      setShowSessionExpiredModal(true);
       return true;
     }
     return false;
@@ -88,5 +89,6 @@ export const useAdminAuth = () => {
     pinError, setPinError,
     pinLoading,
     handlePinSubmit, handleLogout, handleExpiredToken,
+    showSessionExpiredModal, setShowSessionExpiredModal,    
   };
 };
