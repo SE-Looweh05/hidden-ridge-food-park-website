@@ -28,10 +28,10 @@ function ReservationTable({
           <th>#</th>
           <th className="sortable" onClick={() => onSort("name")}>Name{getSortIcon("name")}</th>
           <th className="sortable" onClick={() => onSort("guests")}>Guests{getSortIcon("guests")}</th>
-          <th className="sortable" onClick={() => onSort("email")}>Email{getSortIcon("email")}</th>
+          {isAuthenticated && <th className="sortable" onClick={() => onSort("email")}>Email{getSortIcon("email")}</th>}
           <th className="sortable" onClick={() => onSort("date")}>Date{getSortIcon("date")}</th>
           <th>Time</th>
-          <th className="sortable" onClick={() => onSort("created_at")}>Submitted{getSortIcon("created_at")}</th>
+          {isAuthenticated && <th className="sortable" onClick={() => onSort("created_at")}>Submitted{getSortIcon("created_at")}</th>}
           {isAuthenticated && <th>Actions</th>}
         </tr>
       </thead>
@@ -41,10 +41,10 @@ function ReservationTable({
             <td>{index + 1}</td>
             <td>{res.name}</td>
             <td>{res.guests}</td>
-            <td>{res.email || "—"}</td>
+            {isAuthenticated && <td>{res.email || "—"}</td>}
             <td>{formatDateShort(res.date)}</td>
             <td>{formatTime(res.time)}</td>
-            <td>{formatCreatedAt(res.created_at)}</td>
+            {isAuthenticated && <td>{formatCreatedAt(res.created_at)}</td>}
             {isAuthenticated && (
               <td>
                 <button className="admin-btn-edit" onClick={() => onEdit(res)}>Edit</button>
