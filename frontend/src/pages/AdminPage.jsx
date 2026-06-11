@@ -77,7 +77,11 @@ function AdminPage() {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` },
       });
-      if (handleExpiredToken(res.status)) return;
+      if (handleExpiredToken(res.status)) {
+        setShowDeleteModal(false);  // ← add this
+        setSelectedId(null);        // ← add this
+        return;
+      }
       fetchReservations();
       setShowDeleteModal(false);
       setSelectedId(null);
@@ -97,7 +101,10 @@ function AdminPage() {
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({ name: editName, guests: editGuests, date: editDate, time: editTime }),
       });
-      if (handleExpiredToken(res.status)) return;
+      if (handleExpiredToken(res.status)) {
+        setShowEditModal(false);  // ← add this
+        return;
+      }
       fetchReservations();
       setShowEditModal(false);
     } catch (err) { console.error("Error editing:", err); }
